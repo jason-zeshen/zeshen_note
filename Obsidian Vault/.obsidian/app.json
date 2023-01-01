@@ -1,0 +1,14 @@
+{
+  "attachmentFolderPath": "images",
+  "newFileLocation": "folder",
+  "newLinkFormat": "absolute",
+  "useMarkdownLinks": true,
+  "alwaysUpdateLinks": true,
+  "spellcheckLanguages": [
+    "zh-CN",
+    "en-US"
+  ],
+  "autoConvertHtml": false,
+  "vimMode": false,
+  "spellcheck": false
+}
