@@ -4,47 +4,23 @@
     "type": "split",
     "children": [
       {
-        "id": "5902cccac16f74b2",
+        "id": "0174d677edfeecdc",
         "type": "tabs",
         "children": [
           {
-            "id": "3cc63c8cbb1472b6",
+            "id": "a6164705a126c711",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "markdown常用语法.md",
+                "file": "计算机学习/linux系统编程/会话(session).md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "1923f25930f828d4",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "计算机学习/linux系统编程/管道、pipe.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "d0b7d91c61407573",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "计算机学习/linux系统编程/lseek().md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "e8200a12a02eed92",
+            "id": "da6c5309e924017b",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -56,43 +32,55 @@
             }
           },
           {
-            "id": "0d46ec3b41f373cb",
+            "id": "c21496d76f96b73f",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "计算机学习/linux系统编程/mmap() 内存映射.md",
+                "file": "计算机学习/linux系统编程/线程.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "8a96c1acbb0a262e",
+            "id": "cc6207a9ba3689c1",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "计算机学习/linux系统编程/mmap() 内存映射.md",
+                "file": "计算机学习/linux系统编程/线程同步.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "63a7923e7e29ffeb",
+            "id": "d046ce8f7b16fb2a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "markdown常用语法.md",
+                "file": "计算机学习/C语言/fprintf.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "97974ef3495b7c08",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "计算机学习/学习路径.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -121,7 +109,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "getppid",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -158,7 +146,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "计算机学习/linux系统编程/mmap() 内存映射.md",
+                "file": "计算机学习/linux系统编程/线程同步.md",
                 "collapseAll": false,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -175,7 +163,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "计算机学习/linux系统编程/mmap() 内存映射.md",
+                "file": "计算机学习/linux系统编程/线程同步.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -198,7 +186,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "计算机学习/linux系统编程/mmap() 内存映射.md"
+                "file": "计算机学习/linux系统编程/线程同步.md"
               }
             }
           }
@@ -219,17 +207,17 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "8a96c1acbb0a262e",
+  "active": "cc6207a9ba3689c1",
   "lastOpenFiles": [
-    "计算机学习/linux系统编程/dup & dup2.md",
-    "计算机学习/linux系统编程/指令：od -tcx 文件名.md",
-    "计算机学习/linux系统编程/练习：pip、dup2、execlp、fork.md",
+    "计算机学习/linux系统编程/线程.md",
+    "计算机学习/linux系统编程/线程同步.md",
+    "计算机学习/linux系统编程/linux后台进程管理.md",
+    "计算机学习/C语言/变量三要素.md",
+    "计算机学习/C语言/fprintf.md",
+    "书籍推荐.md",
+    "计算机学习/学习路径.md",
     "计算机学习/linux系统编程/进程间通信(IPC, InterProcess Communication).md",
-    "计算机学习/linux系统编程/mmap() 内存映射.md",
-    "计算机学习/linux系统编程/lseek().md",
-    "计算机学习/linux系统编程/管道、pipe.md",
-    "计算机学习/linux系统编程/命名管道、fifo.md",
-    "计算机学习/linux系统编程/宏函数.md",
-    "计算机学习/linux系统编程/僵尸进程、孤儿进程、守护进程.md"
+    "计算机学习/linux系统编程/进程地址空间.md",
+    "计算机学习/C语言/动态内存分配.md"
   ]
 }
