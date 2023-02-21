@@ -8,79 +8,63 @@
         "type": "tabs",
         "children": [
           {
-            "id": "a6164705a126c711",
+            "id": "4b4f2f7ed8874d4c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "计算机学习/linux系统编程/会话(session).md",
+                "file": "计算机学习/C语言/一维二维数组.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "da6c5309e924017b",
+            "id": "61442252e2b8cc8e",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "计算机学习/linux系统编程/进程间通信(IPC, InterProcess Communication).md",
+                "file": "计算机学习/C语言/内存分配（进程地址空间）.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "c21496d76f96b73f",
+            "id": "599458080bdd5f25",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {}
+            }
+          },
+          {
+            "id": "8e67195b36edb184",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "计算机学习/linux系统编程/线程.md",
+                "file": "计算机学习/开源项目/db_tutorial 用 C 从零创建一个简单的数据库.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "cc6207a9ba3689c1",
+            "id": "0a0e8485c7c151e1",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "计算机学习/linux系统编程/线程同步.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "d046ce8f7b16fb2a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "计算机学习/C语言/fprintf.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "97974ef3495b7c08",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "计算机学习/学习路径.md",
+                "file": "markdown常用语法.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -109,7 +93,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "getppid",
+                "query": "const",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -146,7 +130,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "计算机学习/linux系统编程/线程同步.md",
                 "collapseAll": false,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -163,7 +146,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "计算机学习/linux系统编程/线程同步.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -185,9 +167,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "计算机学习/linux系统编程/线程同步.md"
-              }
+              "state": {}
             }
           }
         ]
@@ -207,17 +187,17 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "cc6207a9ba3689c1",
+  "active": "93868f94f18fb6fc",
   "lastOpenFiles": [
-    "计算机学习/linux系统编程/线程.md",
-    "计算机学习/linux系统编程/线程同步.md",
-    "计算机学习/linux系统编程/linux后台进程管理.md",
-    "计算机学习/C语言/变量三要素.md",
-    "计算机学习/C语言/fprintf.md",
-    "书籍推荐.md",
-    "计算机学习/学习路径.md",
-    "计算机学习/linux系统编程/进程间通信(IPC, InterProcess Communication).md",
-    "计算机学习/linux系统编程/进程地址空间.md",
-    "计算机学习/C语言/动态内存分配.md"
+    "2.md",
+    "1.md",
+    "计算机学习/C语言/文件的操作（标准IO）.md",
+    "计算机学习/C语言/内存分配（进程地址空间）.md",
+    "计算机学习/C语言/动态内存分配.md",
+    "计算机学习/C语言/结构体.md",
+    "计算机学习/C语言/一维二维数组.md",
+    "计算机学习/C语言/排序.md",
+    "计算机学习/C语言/日志封装.md",
+    "markdown常用语法.md"
   ]
 }
