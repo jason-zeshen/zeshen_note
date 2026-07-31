@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>纳指ETF 溢价 · 真实回放微世界 (513100)</title>
+<style>
+  :root{--bg:#0f1117;--panel:#171a23;--panel2:#1e222d;--line:#2b303c;--fg:#e6e8ee;--muted:#8b93a7;--accent:#4ea1ff;--good:#3ecf8e;--warn:#e0954a;--bad:#ff6b6b;--nav:#3ecf8e;--price:#4ea1ff;--prem:#e0954a;--wait:#6b7c99;--start:#c78bff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Roboto,sans-serif;font-size:14px;line-height:1.5;}
+  .wrap{max-width:1200px;margin:0 auto;padding:20px 18px 60px;}
+  h1{font-size:22px;margin:0 0 2px;} .sub{color:var(--muted);font-size:13px;margin:0 0 18px;}
+  .layout{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start;}
+  @media(max-width:920px){.layout{grid-template-columns:1fr;}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px;}
+  .card h2{font-size:14px;margin:0 0 12px;letter-spacing:.02em;}
+  .ctrl{margin-bottom:11px;} .ctrl label{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-bottom:3px;} .ctrl label b{color:var(--fg);font-variant-numeric:tabular-nums;}
+  input[type=range]{width:100%;accent-color:var(--accent);}
+  .seg{display:flex;gap:6px;flex-wrap:wrap;} .seg button{flex:1;min-width:56px;background:var(--panel2);color:var(--muted);border:1px solid var(--line);border-radius:7px;padding:7px 4px;cursor:pointer;font-size:12px;} .seg button.on{background:var(--accent);color:#04122a;border-color:var(--accent);font-weight:600;}
+  .row{display:flex;gap:8px;} .btn{background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 0;cursor:pointer;font-size:13px;flex:1;} .btn:hover{border-color:var(--accent);} .btn.primary{background:var(--accent);color:#04122a;border-color:var(--accent);font-weight:600;}
+  canvas{width:100%;display:block;background:var(--panel2);border-radius:8px;}
+  .charttitle{font-size:12px;color:var(--muted);margin:2px 0 6px;display:flex;justify-content:space-between;}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:6px;} .legend i{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle;}
+  .cmp{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:4px;} @media(max-width:760px){.cmp{grid-template-columns:1fr;}} .cmpbox{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;} .cmpbox.a{border-left:3px solid var(--price);} .cmpbox.b{border-left:3px solid var(--good);} .cmpbox.c{border-left:3px solid var(--start);}
+  .cmpbox h3{font-size:12px;margin:0 0 6px;} .cmpbox .line{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:1px 0;} .cmpbox .line b{color:var(--fg);font-variant-numeric:tabular-nums;} .big{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;} @media(max-width:620px){.stats{grid-template-columns:repeat(2,1fr);}}
+  .stat{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 11px;} .stat .k{font-size:11px;color:var(--muted);} .stat .v{font-size:17px;font-variant-numeric:tabular-nums;font-weight:600;margin-top:2px;}
+  .log{height:160px;overflow:auto;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-family:ui-monospace,Menlo,monospace;font-size:12px;} .log div{padding:1px 0;border-bottom:1px solid #232734;} .log .buy{color:var(--good);} .log .wait{color:var(--wait);} .log .buyhi{color:var(--warn);}
+  .note{color:var(--muted);font-size:12.5px;margin-top:10px;border-top:1px solid var(--line);padding-top:10px;} .note b{color:var(--fg);} .note code{background:var(--panel2);padding:1px 5px;border-radius:4px;}
+  .pos{color:var(--good);} .neg{color:var(--bad);}
+  .jump{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;} .jump button{background:var(--panel2);border:1px solid var(--line);color:var(--muted);border-radius:6px;padding:5px 8px;font-size:11px;cursor:pointer;} .jump button:hover{border-color:var(--warn);color:var(--warn);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>纳指 ETF 溢价 · 真实回放微世界</h1>
+  <p class="sub">数据：<b>513100 国泰纳指</b>真实月度历史（2015-01 ~ 2026-07，139 月，含 2015/2018/2020/2022 多轮崩塌）。场内价 = 净值(IOPV) × (1+溢价)。你买场内价，真值是净值。</p>
+
+  <div class="layout">
+    <div>
+      <div class="card">
+        <h2>策略参数</h2>
+        <div class="ctrl"><label>策略起始月 <b id="vStart">2015-01</b></label><input type="range" id="start" min="0" max="120" value="0" step="1"></div>
+        <div class="ctrl"><label>策略停止/卖出月 E <b id="vEnd">2026-07</b></label><input type="range" id="end" min="1" max="138" value="138" step="1"></div>
+        <div class="ctrl"><label>每月定投额 B <b id="vB">1000</b></label><input type="range" id="B" min="500" max="5000" value="1000" step="500"></div>
+        <div class="ctrl"><label>溢价阈值（择时用，≤此才买） <b id="vThr">3%</b></label><input type="range" id="thr" min="0" max="10" value="3" step="0.5"></div>
+        <div class="ctrl"><label style="margin-bottom:5px">日志/买点 看哪个策略</label>
+          <div class="seg" id="segStrat"><button data-s="A" class="on">买ETF无脑</button><button data-s="B">买ETF择时</button><button data-s="C">直接美股</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>播放</h2>
+        <div class="row" style="margin-bottom:8px"><button class="btn" id="reset">↻ 回到起点</button><button class="btn" id="step">单步 ▸</button></div>
+        <div class="row"><button class="btn primary" id="play">▶ 播放</button><button class="btn" id="done">跑完 ⇥</button></div>
+        <div style="margin-top:10px;color:var(--muted);font-size:12px" id="prog">–</div>
+        <div class="jump"><span style="color:var(--muted);font-size:11px;width:100%">快捷跳（需起始月在其之前）：</span>
+          <button data-j="2020-03">2020-03 股灾</button>
+          <button data-j="2025-02">2025-02 崩谷</button>
+          <button data-j="2026-03">2026-03 崩谷</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="charttitle"><span>场内价 vs 净值（元）· 阴影=溢价 · 圆点=买入（X轴随起始月缩放）</span><span id="c1lbl"></span></div>
+        <canvas id="c1" width="840" height="270"></canvas>
+        <div class="legend"><span><i style="background:var(--price)"></i>场内价（含溢价）</span><span><i style="background:var(--nav)"></i>净值 IOPV（真值）</span><span><i style="background:var(--good);border-radius:50%;width:8px;height:8px"></i>买入</span></div>
+      </div>
+      <div class="card">
+        <div class="charttitle"><span>溢价 %（虚线=阈值 · 绿带=可买窗口）</span></div>
+        <canvas id="c2" width="840" height="170"></canvas>
+      </div>
+      <div class="card">
+        <h2>三种买法对比（买ETF无脑 / 买ETF择时 / 直接买美股）</h2>
+        <div class="cmp">
+          <div class="cmpbox a"><h3>买ETF·无脑定投（每月按场内价买·吃溢价）</h3>
+            <div class="line">总收益 <b class="big" id="aRet">–</b></div><div class="line">投入 <b id="aInv">–</b></div><div class="line">卖出可得(场内价) <b id="aVal">–</b></div><div class="line">平均买入溢价 <b id="aPrem">–</b></div></div>
+          <div class="cmpbox b"><h3>买ETF·溢价择时（≤阈值才买）</h3>
+            <div class="line">总收益 <b class="big" id="bRet">–</b></div><div class="line">投入(含闲置现金) <b id="bInv">–</b></div><div class="line">卖出可得(场内价) <b id="bVal">–</b></div><div class="line">平均买入溢价 <b id="bPrem">–</b></div><div class="line">踏空月份 <b id="bMiss">–</b></div></div>
+          <div class="cmpbox c"><h3>直接买美股·无脑定投（按指数净值·无溢价）</h3>
+            <div class="line">总收益 <b class="big" id="cRet">–</b></div><div class="line">投入 <b id="cInv">–</b></div><div class="line">卖出可得(净值) <b id="cVal">–</b></div><div class="line">买入溢价 <b id="cPrem">恒 0.0%</b></div></div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="k">溢价效应<br><span style="font-size:10px">（买ETF无脑 − 直接美股）</span></div><div class="v" id="drag">–</div></div>
+          <div class="stat"><div class="k">择时 vs 美股<br><span style="font-size:10px">（买ETF择时 − 直接美股）</span></div><div class="v" id="diffBC">–</div></div>
+          <div class="stat"><div class="k">卖出月溢价</div><div class="v" id="nowPrem">–</div></div>
+        </div>
+      </div>
+      <div class="card"><h2>决策日志（<span id="logStrat">买ETF·无脑定投</span>）</h2><div class="log" id="log"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>说明</h2>
+    <div class="note">
+      <b>核心机制</b>：<code>场内价 = 净值 × (1+溢价)</code>。你按场内价买入，成本含当时溢价；溢价回落时持仓市值向净值缩，那部分溢价"还回去"。<b>真收益来自净值(纳指本身)，溢价只在"买高卖低"时净损失、否则大致washout。</b><br>
+      <b>买 ETF vs 直接买美股</b>：<b>买 ETF</b>=在国内证券账户买纳指 QDII ETF（159659 / 513100），因 QDII 额度受限、资金追捧，场内价常<b>高于净值（溢价）</b>，你买时吃掉这块；<b>直接买美股</b>=开美股账户买 QQQ 等，美股套利让价格≈净值、<b>基本无溢价</b>，代价是要换汇（每年 5 万美元额度）、自理税务、盯美股时段。<b>第三条曲线（直接买美股）≈"溢价=0 的无脑定投"，是干净的纳指本身收益；和买 ETF 两条的差 = A股溢价的真实代价。</b>（简化：忽略汇率差异与两边手续费，只突出溢价这一主项。）<br>
+      <b>起始月</b>：调它 = 换一个"开始定投"的时点，看起点敏感度（从股灾前 vs 从底部开始，结果差很多）。<br>
+      <b>停止/卖出月 E</b>：策略在 E 月停买并<b>全部按场内价卖出</b>，回报即"卖掉到手"的已实现收益。关键：ETF 市值按<b>场内价(含当月溢价)</b>算——<b>卖在高溢价月（如 2026-07 溢价 10%），那 10% 溢价把市值垫高，ETF 看着远超直接买美股；把 E 拖到低溢价月（如 2026-03 溢价 2%），这块额外收益消失，ETF 的领先缩回到接近 0。</b>换句话说：<b>买 ETF 相对直接买美股并没有真优势，当前账面领先全靠"卖点碰上高溢价"</b>——溢价一回落到常态就没了（若卖点溢价还低于你的平均买入溢价，ETF 反而输）。所以看这工具，重点不是"卖在高溢价那个漂亮数字"，而是"卖在常态溢价时还剩多少"。（直接买美股按净值卖，无此效应。）<br>
+      <b>数据是 513100 国泰，不是 159659 招商</b>：回测用 <b>513100 国泰</b>（2013 年成立，有 2015 至今完整历史）；你实际买的 <b>159659 招商</b> 2023 才上市、跨度太短、拉不出长回测。招商是三只里<b>溢价最低</b>的，所以这里显示的溢价是<b>偏高的放大版</b>——方向对、量级偏大，看清"溢价代价"够用，别把某月具体数字套到招商上。<br>
+      <b>故意简化</b>：月末取样（真实按日）；溢价用"场内价÷净值−1"（净值 T+1 滞后、有时区噪音）；无手续费/税；没建"4个月踏空止损/回撤加码"。<b>建直觉的工具，不是回测器。</b>
+    </div>
+  </div>
+</div>
+
+<script>
+const REAL=[{m:"2015-01",price:0.274,nav:0.271,prem:1.33},{m:"2015-02",price:0.290,nav:0.290,prem:-0.21},{m:"2015-03",price:0.287,nav:0.283,prem:1.48},{m:"2015-04",price:0.292,nav:0.286,prem:1.89},{m:"2015-05",price:0.295,nav:0.293,prem:0.82},{m:"2015-06",price:0.288,nav:0.286,prem:0.84},{m:"2015-07",price:0.305,nav:0.298,prem:2.48},{m:"2015-08",price:0.294,nav:0.291,prem:1.03},{m:"2015-09",price:0.279,nav:0.283,prem:-1.41},{m:"2015-10",price:0.314,nav:0.313,prem:0.32},{m:"2015-11",price:0.317,nav:0.316,prem:0.06},{m:"2015-12",price:0.323,nav:0.316,prem:2.28},{m:"2016-01",price:0.292,nav:0.297,prem:-1.95},{m:"2016-02",price:0.293,nav:0.292,prem:0.21},{m:"2016-03",price:0.307,nav:0.308,prem:-0.20},{m:"2016-04",price:0.301,nav:0.298,prem:1.07},{m:"2016-05",price:0.315,nav:0.316,prem:-0.25},{m:"2016-06",price:0.307,nav:0.311,prem:-1.09},{m:"2016-07",price:0.333,nav:0.333,prem:-0.12},{m:"2016-08",price:0.339,nav:0.338,prem:0.12},{m:"2016-09",price:0.341,nav:0.345,prem:-0.93},{m:"2016-10",price:0.347,nav:0.343,prem:1.05},{m:"2016-11",price:0.358,nav:0.350,prem:2.17},{m:"2016-12",price:0.363,nav:0.356,prem:1.96},{m:"2017-01",price:0.376,nav:0.373,prem:0.91},{m:"2017-02",price:0.391,nav:0.386,prem:1.30},{m:"2017-03",price:0.401,nav:0.394,prem:1.77},{m:"2017-04",price:0.404,nav:0.404,prem:-0.15},{m:"2017-05",price:0.421,nav:0.418,prem:0.91},{m:"2017-06",price:0.403,nav:0.403,prem:0.00},{m:"2017-07",price:0.415,nav:0.416,prem:-0.19},{m:"2017-08",price:0.411,nav:0.416,prem:-1.25},{m:"2017-09",price:0.414,nav:0.418,prem:-0.96},{m:"2017-10",price:0.434,nav:0.436,prem:-0.41},{m:"2017-11",price:0.443,nav:0.442,prem:0.09},{m:"2017-12",price:0.446,nav:0.440,prem:1.27},{m:"2018-01",price:0.462,nav:0.463,prem:-0.30},{m:"2018-02",price:0.457,nav:0.457,prem:0.04},{m:"2018-03",price:0.437,nav:0.437,prem:0.14},{m:"2018-04",price:0.447,nav:0.444,prem:0.68},{m:"2018-05",price:0.470,nav:0.469,prem:0.13},{m:"2018-06",price:0.490,nav:0.489,prem:0.16},{m:"2018-07",price:0.517,nav:0.517,prem:-0.08},{m:"2018-08",price:0.548,nav:0.548,prem:0.00},{m:"2018-09",price:0.551,nav:0.550,prem:0.11},{m:"2018-10",price:0.497,nav:0.508,prem:-2.05},{m:"2018-11",price:0.499,nav:0.504,prem:-1.15},{m:"2018-12",price:0.449,nav:0.452,prem:-0.80},{m:"2019-01",price:0.479,nav:0.484,prem:-0.95},{m:"2019-02",price:0.492,nav:0.496,prem:-0.81},{m:"2019-03",price:0.514,nav:0.519,prem:-0.96},{m:"2019-04",price:0.561,nav:0.547,prem:2.71},{m:"2019-05",price:0.515,nav:0.512,prem:0.43},{m:"2019-06",price:0.544,nav:0.549,prem:-0.91},{m:"2019-07",price:0.571,nav:0.562,prem:1.64},{m:"2019-08",price:0.568,nav:0.566,prem:0.35},{m:"2019-09",price:0.567,nav:0.569,prem:-0.39},{m:"2019-10",price:0.590,nav:0.592,prem:-0.34},{m:"2019-11",price:0.619,nav:0.614,prem:0.85},{m:"2019-12",price:0.639,nav:0.633,prem:0.85},{m:"2020-01",price:0.696,nav:0.660,prem:5.33},{m:"2020-02",price:0.678,nav:0.615,prem:10.31},{m:"2020-03",price:0.620,nav:0.571,prem:8.51},{m:"2020-04",price:0.747,nav:0.655,prem:14.11},{m:"2020-05",price:0.746,nav:0.702,prem:6.24},{m:"2020-06",price:0.754,nav:0.741,prem:1.81},{m:"2020-07",price:0.784,nav:0.785,prem:-0.08},{m:"2020-08",price:1.012,nav:0.856,prem:18.15},{m:"2020-09",price:0.911,nav:0.801,prem:13.70},{m:"2020-10",price:0.850,nav:0.765,prem:11.11},{m:"2020-11",price:0.863,nav:0.831,prem:3.90},{m:"2020-12",price:0.875,nav:0.866,prem:1.06},{m:"2021-01",price:0.865,nav:0.861,prem:0.56},{m:"2021-02",price:0.849,nav:0.859,prem:-1.19},{m:"2021-03",price:0.866,nav:0.883,prem:-1.99},{m:"2021-04",price:0.924,nav:0.920,prem:0.37},{m:"2021-05",price:0.895,nav:0.895,prem:-0.02},{m:"2021-06",price:0.967,nav:0.965,prem:0.25},{m:"2021-07",price:0.982,nav:0.992,prem:-0.95},{m:"2021-08",price:1.045,nav:1.034,prem:1.02},{m:"2021-09",price:0.989,nav:0.977,prem:1.23},{m:"2021-10",price:1.024,nav:1.039,prem:-1.37},{m:"2021-11",price:1.069,nav:1.055,prem:1.31},{m:"2021-12",price:1.073,nav:1.067,prem:0.58},{m:"2022-01",price:0.919,nav:0.944,prem:-2.65},{m:"2022-02",price:0.896,nav:0.922,prem:-2.82},{m:"2022-03",price:0.983,nav:0.964,prem:1.97},{m:"2022-04",price:0.905,nav:0.869,prem:4.14},{m:"2022-05",price:0.868,nav:0.859,prem:1.05},{m:"2022-06",price:0.801,nav:0.787,prem:1.78},{m:"2022-07",price:0.888,nav:0.889,prem:-0.11},{m:"2022-08",price:0.875,nav:0.861,prem:1.63},{m:"2022-09",price:0.812,nav:0.792,prem:2.53},{m:"2022-10",price:0.849,nav:0.831,prem:2.17},{m:"2022-11",price:0.842,nav:0.878,prem:-4.10},{m:"2022-12",price:0.799,nav:0.778,prem:2.70},{m:"2023-01",price:0.832,nav:0.835,prem:-0.36},{m:"2023-02",price:0.855,nav:0.852,prem:0.35},{m:"2023-03",price:0.908,nav:0.922,prem:-1.52},{m:"2023-04",price:0.923,nav:0.933,prem:-1.07},{m:"2023-05",price:1.031,nav:1.024,prem:0.68},{m:"2023-06",price:1.100,nav:1.111,prem:-0.99},{m:"2023-07",price:1.149,nav:1.138,prem:0.97},{m:"2023-08",price:1.140,nav:1.127,prem:1.15},{m:"2023-09",price:1.080,nav:1.068,prem:1.12},{m:"2023-10",price:1.054,nav:1.046,prem:0.76},{m:"2023-11",price:1.153,nav:1.145,prem:0.70},{m:"2023-12",price:1.213,nav:1.204,prem:0.75},{m:"2024-01",price:1.264,nav:1.230,prem:2.76},{m:"2024-02",price:1.300,nav:1.295,prem:0.39},{m:"2024-03",price:1.337,nav:1.308,prem:2.22},{m:"2024-04",price:1.299,nav:1.251,prem:3.84},{m:"2024-05",price:1.353,nav:1.329,prem:1.81},{m:"2024-06",price:1.475,nav:1.413,prem:4.39},{m:"2024-07",price:1.429,nav:1.391,prem:2.73},{m:"2024-08",price:1.417,nav:1.402,prem:1.07},{m:"2024-09",price:1.409,nav:1.416,prem:-0.49},{m:"2024-10",price:1.459,nav:1.425,prem:2.39},{m:"2024-11",price:1.532,nav:1.512,prem:1.32},{m:"2024-12",price:1.629,nav:1.516,prem:7.45},{m:"2025-01",price:1.615,nav:1.520,prem:6.25},{m:"2025-02",price:1.511,nav:1.503,prem:0.53},{m:"2025-03",price:1.411,nav:1.388,prem:1.66},{m:"2025-04",price:1.446,nav:1.412,prem:2.41},{m:"2025-05",price:1.556,nav:1.536,prem:1.30},{m:"2025-06",price:1.629,nav:1.626,prem:0.18},{m:"2025-07",price:1.704,nav:1.662,prem:2.53},{m:"2025-08",price:1.692,nav:1.665,prem:1.62},{m:"2025-09",price:1.813,nav:1.754,prem:3.36},{m:"2025-10",price:1.982,nav:1.832,prem:8.19},{m:"2025-11",price:1.943,nav:1.799,prem:8.00},{m:"2025-12",price:1.904,nav:1.774,prem:7.36},{m:"2026-01",price:1.881,nav:1.779,prem:5.75},{m:"2026-02",price:1.819,nav:1.726,prem:5.36},{m:"2026-03",price:1.674,nav:1.641,prem:2.01},{m:"2026-04",price:1.959,nav:1.881,prem:4.14},{m:"2026-05",price:2.273,nav:2.065,prem:10.09},{m:"2026-06",price:2.204,nav:2.057,prem:7.16},{m:"2026-07",price:2.068,nav:1.881,prem:9.97}];
+const $=id=>document.getElementById(id);
+const N=REAL.length-1;
+let P={B:1000,thr:3}, S=0, E=N, cur=N, timer=null, SEL='A', sim=null;
+
+function readParams(){
+  P.B=+$('B').value; P.thr=+$('thr').value; S=+$('start').value; E=+$('end').value;
+  if(E<=S){E=Math.min(N,S+1);$('end').value=E;}
+  $('vB').textContent=P.B; $('vThr').textContent=P.thr+'%'; $('vStart').textContent=REAL[S].m; $('vEnd').textContent=REAL[E].m;
+}
+function build(){
+  readParams();
+  const A={sh:0,inv:0,pw:0,pd:0,buys:[]}, B={sh:0,inv:0,cash:0,pw:0,pd:0,buys:[],miss:0}, C={sh:0,inv:0,buys:[]};
+  const track={};
+  for(let t=S+1;t<=E;t++){
+    const pr=REAL[t].prem, px=REAL[t].price, nv=REAL[t].nav;
+    A.sh+=P.B/px; A.inv+=P.B; A.pw+=pr*P.B; A.pd+=P.B; A.buys.push(t);
+    B.cash+=P.B; B.inv+=P.B;
+    if(pr<=P.thr){ B.sh+=B.cash/px; B.pw+=pr*B.cash; B.pd+=B.cash; B.cash=0; B.buys.push(t); } else B.miss++;
+    C.sh+=P.B/nv; C.inv+=P.B; C.buys.push(t);
+    track[t]={aVal:A.sh*px,aInv:A.inv,aPrem:A.pd?A.pw/A.pd:0, bVal:B.sh*px+B.cash,bInv:B.inv,bPrem:B.pd?B.pw/B.pd:0,bMiss:B.miss, cVal:C.sh*nv,cInv:C.inv};
+  }
+  sim={track,Abuys:A.buys,Bbuys:B.buys,Cbuys:C.buys};
+}
+function niceTicks(mn,mx,n){const s=(mx-mn)/n,o=[];for(let i=0;i<=n;i++)o.push(mn+s*i);return o;}
+function drawAxes(x,W,H,L,R,T,Bt,ymn,ymx,yfmt,lo,hi){
+  x.font='10px monospace';
+  for(const v of niceTicks(ymn,ymx,4)){const yy=H-Bt-(v-ymn)/(ymx-ymn)*(H-T-Bt);
+    x.strokeStyle='#232734';x.beginPath();x.moveTo(L,yy);x.lineTo(W-R,yy);x.stroke();
+    x.fillStyle='#8b93a7';x.textAlign='right';x.fillText(yfmt(v),L-4,yy+3);}
+  x.textAlign='center';
+  const span=Math.max(1,hi-lo);
+  for(let i=0;i<=6;i++){const t=Math.round(lo+i/6*span);const xx=L+(t-lo)/span*(W-L-R);
+    x.fillStyle='#5a6274';x.fillText(REAL[t].m, xx, H-Bt+14);}
+}
+function drawC1(){
+  const cv=$('c1'),x=cv.getContext('2d'),W=cv.width,H=cv.height,L=46,R=14,T=12,Bt=26;
+  x.clearRect(0,0,W,H);
+  const lo=S,hi=N,span=Math.max(1,hi-lo);
+  let mn=1e9,mx=-1e9;for(let t=lo;t<=hi;t++){mn=Math.min(mn,REAL[t].nav);mx=Math.max(mx,REAL[t].price);}
+  mn=Math.floor(mn*20)/20;mx=Math.ceil(mx*20)/20;
+  const py=v=>H-Bt-(v-mn)/(mx-mn)*(H-T-Bt), px=t=>L+(t-lo)/span*(W-L-R);
+  drawAxes(x,W,H,L,R,T,Bt,mn,mx,v=>v.toFixed(2),lo,hi);
+  // 溢价阴影 lo..cur
+  x.beginPath();for(let t=lo;t<=cur;t++){const xx=px(t);t===lo?x.moveTo(xx,py(REAL[t].price)):x.lineTo(xx,py(REAL[t].price));}
+  for(let t=cur;t>=lo;t--)x.lineTo(px(t),py(REAL[t].nav));x.closePath();x.fillStyle='rgba(224,149,74,0.13)';x.fill();
+  x.strokeStyle='#3ecf8e';x.lineWidth=2;x.beginPath();for(let t=lo;t<=cur;t++){const xx=px(t);t===lo?x.moveTo(xx,py(REAL[t].nav)):x.lineTo(xx,py(REAL[t].nav));}x.stroke();
+  x.strokeStyle='#4ea1ff';x.lineWidth=2;x.beginPath();for(let t=lo;t<=cur;t++){const xx=px(t);t===lo?x.moveTo(xx,py(REAL[t].price)):x.lineTo(xx,py(REAL[t].price));}x.stroke();
+  const cx=px(cur);x.strokeStyle='#4ea1ff';x.setLineDash([3,3]);x.beginPath();x.moveTo(cx,T);x.lineTo(cx,H-Bt);x.stroke();x.setLineDash([]);
+  const buys=(SEL==='A')?sim.Abuys:(SEL==='B')?sim.Bbuys:sim.Cbuys;
+  const onNav=(SEL==='C');x.fillStyle=onNav?'#c78bff':'#3ecf8e';
+  for(const t of buys)if(t>=lo&&t<=cur){x.beginPath();x.arc(px(t),py(onNav?REAL[t].nav:REAL[t].price),3,0,7);x.fill();}
+  $('c1lbl').textContent=REAL[cur].m+'  场内'+REAL[cur].price.toFixed(3)+' / 净值'+REAL[cur].nav.toFixed(3);
+}
+function drawC2(){
+  const cv=$('c2'),x=cv.getContext('2d'),W=cv.width,H=cv.height,L=46,R=14,T=12,Bt=26;
+  x.clearRect(0,0,W,H);
+  const lo=S,hi=N,span=Math.max(1,hi-lo);
+  let mn=0,mx=-1e9;for(let t=lo;t<=hi;t++){mn=Math.min(mn,REAL[t].prem);mx=Math.max(mx,REAL[t].prem);}
+  mn=Math.floor(mn);mx=Math.ceil(mx);
+  const py=v=>H-Bt-(v-mn)/(mx-mn)*(H-T-Bt), px=t=>L+(t-lo)/span*(W-L-R);
+  drawAxes(x,W,H,L,R,T,Bt,mn,mx,v=>v.toFixed(0)+'%',lo,hi);
+  for(let t=lo;t<=cur;t++)if(REAL[t].prem<=P.thr){x.fillStyle='rgba(62,207,142,0.14)';x.fillRect(px(t)-2.5,T,5,H-T-Bt);}
+  x.strokeStyle='#e0954a';x.setLineDash([4,4]);x.beginPath();x.moveTo(L,py(P.thr));x.lineTo(W-R,py(P.thr));x.stroke();x.setLineDash([]);
+  x.strokeStyle='#e0954a';x.lineWidth=2;x.beginPath();for(let t=lo;t<=cur;t++){const xx=px(t);t===lo?x.moveTo(xx,py(REAL[t].prem)):x.lineTo(xx,py(REAL[t].prem));}x.stroke();
+  const cx=px(cur);x.strokeStyle='#4ea1ff';x.setLineDash([3,3]);x.beginPath();x.moveTo(cx,T);x.lineTo(cx,H-Bt);x.stroke();x.setLineDash([]);
+}
+function fmtPct(v){return (v>=0?'+':'')+(v*100).toFixed(1)+'%';}
+function refresh(){
+  const z={aVal:0,aInv:0,aPrem:0,bVal:0,bInv:0,bPrem:0,bMiss:0,cVal:0,cInv:0};
+  const s=(cur>S && sim.track[cur])?sim.track[cur]:z;
+  const aR=s.aInv?s.aVal/s.aInv-1:0,bR=s.bInv?s.bVal/s.bInv-1:0,cR=s.cInv?s.cVal/s.cInv-1:0;
+  $('aRet').textContent=fmtPct(aR);$('aRet').className='big '+(aR>=0?'pos':'neg');
+  $('aInv').textContent=Math.round(s.aInv);$('aVal').textContent=s.aVal.toFixed(0);$('aPrem').textContent=s.aPrem.toFixed(1)+'%';
+  $('bRet').textContent=fmtPct(bR);$('bRet').className='big '+(bR>=0?'pos':'neg');
+  $('bInv').textContent=Math.round(s.bInv);$('bVal').textContent=s.bVal.toFixed(0);$('bPrem').textContent=s.bPrem.toFixed(1)+'%';$('bMiss').textContent=s.bMiss+' 月';
+  $('cRet').textContent=fmtPct(cR);$('cRet').className='big '+(cR>=0?'pos':'neg');
+  $('cInv').textContent=Math.round(s.cInv);$('cVal').textContent=s.cVal.toFixed(0);
+  const drag=aR-cR;$('drag').textContent=fmtPct(drag);$('drag').className='v '+(drag>=0?'pos':'neg');
+  const diffBC=bR-cR;$('diffBC').textContent=fmtPct(diffBC);$('diffBC').className='v '+(diffBC>=0?'pos':'neg');
+  $('nowPrem').textContent=REAL[cur].prem.toFixed(1)+'%';
+  $('prog').textContent='起 '+REAL[S].m+' → 现 '+REAL[cur].m+'（已投 '+Math.max(0,cur-S)+' 月）';
+  drawC1();drawC2();renderLog();
+}
+function renderLog(){
+  let h='';for(let t=S+1;t<=cur;t++){const pr=REAL[t].prem,px=REAL[t].price,nv=REAL[t].nav;
+    if(SEL==='A')h+=`<div class="${pr>P.thr?'buyhi':'buy'}">${REAL[t].m}: 溢价 ${pr.toFixed(1)}% → 买ETF @${px.toFixed(3)}${pr>P.thr?' ⚠️高溢价也买':''}</div>`;
+    else if(SEL==='B')h+= pr<=P.thr?`<div class="buy">${REAL[t].m}: 溢价 ${pr.toFixed(1)}% ≤阈值 → 买ETF @${px.toFixed(3)}</div>`:`<div class="wait">${REAL[t].m}: 溢价 ${pr.toFixed(1)}% >阈值 → 不买，攒现金 ⏸</div>`;
+    else h+=`<div class="buy">${REAL[t].m}: 直接买美股（按指数净值折算）@${nv.toFixed(3)}（无 A股溢价）</div>`;}
+  const el=$('log');el.innerHTML=h;el.scrollTop=el.scrollHeight;$('logStrat').textContent=SEL==='A'?'买ETF·无脑定投':SEL==='B'?'买ETF·溢价择时':'直接买美股';
+}
+function stepOne(){if(cur<E){cur++;refresh();}else stop();}
+function play(){if(timer){stop();return;}$('play').textContent='⏸ 暂停';timer=setInterval(stepOne,150);}
+function stop(){if(timer){clearInterval(timer);timer=null;}$('play').textContent='▶ 播放';}
+function done(){stop();cur=E;refresh();}
+function reset(){stop();cur=S;refresh();}
+$('start').addEventListener('input',()=>{const wasFull=cur>=E;build();cur=wasFull?E:Math.min(E,Math.max(S,cur));refresh();});
+$('end').addEventListener('input',()=>{const wasFull=cur>=E;build();cur=wasFull?E:Math.min(cur,E);if(cur<S)cur=S;refresh();});
+['B','thr'].forEach(id=>$(id).addEventListener('input',()=>{build();refresh();}));
+$('segStrat').addEventListener('click',e=>{if(e.target.dataset.s){SEL=e.target.dataset.s;[...$('segStrat').children].forEach(b=>b.classList.toggle('on',b.dataset.s===SEL));refresh();}});
+$('reset').onclick=reset;$('step').onclick=()=>{stop();stepOne();};$('play').onclick=play;$('done').onclick=done;
+document.querySelectorAll('.jump button').forEach(b=>b.onclick=()=>{stop();const i=REAL.findIndex(r=>r.m===b.dataset.j);if(i>S){cur=Math.min(i,E);refresh();}else{cur=Math.max(cur,S);refresh();}});
+$('start').max=N-6;
+build();done();
+</script>
+</body>
+</html>
