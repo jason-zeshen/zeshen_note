@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Steam Discounts</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">🎮</span>
+      <h1>Steam Discounts</h1>
+    </div>
+    <div class="meta" id="meta">Loading…</div>
+  </header>
+
+  <section class="controls">
+    <input id="search" type="search" placeholder="Filter by name…" autocomplete="off" />
+
+    <label class="ctl">
+      Region
+      <select id="cc">
+        <option value="us">US $</option>
+        <option value="uk">UK £</option>
+        <option value="de">DE €</option>
+        <option value="cn">CN ¥</option>
+        <option value="jp">JP ¥</option>
+        <option value="ru">RU ₽</option>
+        <option value="br">BR R$</option>
+      </select>
+    </label>
+
+    <label class="ctl">
+      Sort
+      <select id="sort">
+        <option value="discount_desc">Discount ↓</option>
+        <option value="discount_asc">Discount ↑</option>
+        <option value="price_asc">Price ↑</option>
+        <option value="price_desc">Price ↓</option>
+        <option value="name">Name A–Z</option>
+      </select>
+    </label>
+
+    <label class="ctl range">
+      Min discount <span id="minLabel">0%</span>
+      <input id="min" type="range" min="0" max="100" step="5" value="0" />
+    </label>
+
+    <button id="refresh" title="Re-fetch from Steam (bypasses cache)">↻ Refresh</button>
+  </section>
+
+  <main>
+    <div id="status" class="status"></div>
+    <div id="grid" class="grid"></div>
+  </main>
+
+  <footer>
+    Data from Steam's public store search. Prices/discounts are Steam's own,
+    for the selected region. Not affiliated with Valve.
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>
