@@ -29,11 +29,15 @@ python3 server.py --demo          # built-in sample data; open http://localhost:
 steam-discounts/
 ├── steam.py            # core: fetch + parse Steam discounts (also a CLI)
 ├── server.py           # tiny stdlib web server: API + serves the frontend
+├── build_exe.bat       # build a Windows .exe locally (see "Windows .exe" below)
 └── frontend/
     ├── index.html      # the page
     ├── style.css       # Steam-ish dark theme
     └── app.js          # filtering / sorting / region switch (client-side)
 ```
+
+The repo also ships `.github/workflows/build-windows-exe.yml`, which builds the
+Windows `.exe` automatically on GitHub — see [Windows .exe](#windows-exe).
 
 ## Run the web app
 
@@ -54,6 +58,56 @@ python3 server.py --demo                # serve built-in sample data (no network
 - First load fetches from Steam (~10–30s) and **caches** the result in memory for 30 min.
 - The page lets you: filter by name, change **region** (US/UK/DE/CN/JP/…), re-sort
   (discount ↑↓, price ↑↓, name), set a **min-discount** slider, and **↻ Refresh** (bypasses cache).
+
+## Windows .exe
+
+A double-click `steam-discounts.exe` is available. It bundles Python + the
+frontend into a single file — the target machine needs **no Python installed**.
+Running it starts the local server and opens the app in your browser; close the
+console window (or Ctrl+C) to stop it. It's still the same local web app, not a
+native GUI. You can pass the same flags, e.g. `steam-discounts.exe --demo`.
+
+> A Windows `.exe` can only be built **on Windows** (PyInstaller can't
+> cross-compile from Linux/macOS). Pick whichever route fits:
+
+### Option A — download from GitHub (no local Python needed)
+
+CI builds the `.exe` on a GitHub-hosted Windows runner and publishes it to a
+**Release**, so any machine can grab it directly — no login, no Python, no build:
+
+- **Direct link (always the latest build):**
+  `https://github.com/jason-zeshen/zeshen_note/releases/download/steam-discounts-latest/steam-discounts.exe`
+- …or open the repo's **Releases** page → *Steam Discounts — latest Windows
+  build* → download `steam-discounts.exe`.
+
+Then just run it. Every push to the `steam-discounts` branch rebuilds and
+refreshes this release; you can also trigger it manually from the **Actions**
+tab (**“Build Windows EXE”** → *Run workflow*). Each run also keeps the `.exe`
+as a downloadable **artifact** for 90 days.
+
+Workflow file: `.github/workflows/build-windows-exe.yml`.
+
+### Option B — build it yourself on a Windows machine
+
+Needs Python 3.7+ on PATH ([python.org/downloads](https://www.python.org/downloads/),
+tick *“Add python.exe to PATH”*). Then, in the `steam-discounts` folder:
+
+```bat
+build_exe.bat
+```
+
+(or manually)
+
+```bat
+python -m pip install pyinstaller
+python -m PyInstaller --onefile --name steam-discounts --add-data "frontend;frontend" server.py
+```
+
+The result is `dist\steam-discounts.exe`.
+
+> **Linux/macOS binary:** the same PyInstaller command works there too (use
+> `--add-data "frontend:frontend"` with a `:` separator), producing a native
+> Linux/macOS executable — just not a Windows `.exe`.
 
 ## Command line
 

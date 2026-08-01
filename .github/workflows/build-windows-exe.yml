@@ -1,0 +1,64 @@
+name: Build Windows EXE
+
+# Builds a real Windows .exe with PyInstaller on a GitHub-hosted Windows runner
+# (a Windows .exe cannot be cross-compiled from Linux/macOS), then publishes it
+# to a GitHub Release so any machine can download it directly — no login, no
+# Python, no build step. Stable link:
+#   https://github.com/<owner>/<repo>/releases/download/steam-discounts-latest/steam-discounts.exe
+
+on:
+  push:
+    branches: [steam-discounts]
+    paths:
+      - "steam-discounts/**"
+      - ".github/workflows/build-windows-exe.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write          # needed to create/update the Release
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash        # Git Bash is available on windows-latest
+        working-directory: steam-discounts
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyInstaller
+        run: python -m pip install --upgrade pip pyinstaller
+
+      - name: Build steam-discounts.exe
+        # On Windows the --add-data separator is ";" (it is ":" on Linux/macOS).
+        run: |
+          python -m PyInstaller --onefile --clean --noconfirm \
+            --name steam-discounts \
+            --add-data "frontend;frontend" \
+            server.py
+
+      - name: Upload as build artifact (backup / per-run download)
+        uses: actions/upload-artifact@v4
+        with:
+          name: steam-discounts-windows-exe
+          path: steam-discounts/dist/steam-discounts.exe
+          if-no-files-found: error
+
+      - name: Publish .exe to a GitHub Release (stable download link)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Recreate a moving "latest" release so the download URL is stable.
+          gh release delete steam-discounts-latest --yes --cleanup-tag 2>/dev/null || true
+          gh release create steam-discounts-latest dist/steam-discounts.exe \
+            --target "$GITHUB_SHA" \
+            --title "Steam Discounts — latest Windows build" \
+            --notes "Auto-built by CI from commit \`${GITHUB_SHA:0:7}\`.
+
+          **Download \`steam-discounts.exe\` below and just run it** — no Python needed.
+          It starts a local server and opens the app in your browser. Try \`steam-discounts.exe --demo\` for offline sample data."

@@ -11,15 +11,29 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 import threading
 import time
+import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 import steam
 
-FRONTEND_DIR = Path(__file__).parent / "frontend"
+
+def _base_dir() -> Path:
+    """Directory that holds ``frontend/``.
+
+    When frozen by PyInstaller (the .exe build) data files are unpacked to a
+    temp dir exposed as ``sys._MEIPASS``; otherwise use this file's folder.
+    """
+    if getattr(sys, "frozen", False):
+        return Path(getattr(sys, "_MEIPASS", Path(sys.executable).parent))
+    return Path(__file__).parent
+
+
+FRONTEND_DIR = _base_dir() / "frontend"
 CACHE_TTL = 1800  # seconds
 DEMO = False  # set by --demo: serve built-in sample data, never touch the network
 
@@ -148,18 +162,30 @@ def main(argv=None):
     p.add_argument("--port", type=int, default=8000)
     p.add_argument("--demo", action="store_true",
                    help="serve built-in sample data (no network needed)")
+    frozen = getattr(sys, "frozen", False)
+    open_grp = p.add_mutually_exclusive_group()
+    open_grp.add_argument("--open", dest="open", action="store_true", default=frozen,
+                          help="open the page in your browser on start "
+                               "(default when running the packaged .exe)")
+    open_grp.add_argument("--no-open", dest="open", action="store_false",
+                          help="do not open a browser automatically")
     args = p.parse_args(argv)
 
     global DEMO
     DEMO = args.demo
 
     httpd = ThreadingHTTPServer((args.host, args.port), Handler)
-    url = f"http://{args.host}:{args.port}"
+    # A localhost URL uses the loopback host even when bound to 0.0.0.0.
+    browse_host = "127.0.0.1" if args.host in ("0.0.0.0", "") else args.host
+    url = f"http://{browse_host}:{args.port}"
     print(f"Steam Discounts running at {url}  (Ctrl+C to stop)")
     if DEMO:
         print("DEMO MODE: showing built-in sample data (not live Steam data).")
     else:
         print("First load fetches from Steam and may take ~10-30s; results are cached.")
+    if args.open:
+        # Give serve_forever a moment to start accepting before we open the tab.
+        threading.Timer(1.0, lambda: webbrowser.open(url)).start()
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
