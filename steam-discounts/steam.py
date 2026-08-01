@@ -264,7 +264,7 @@ def fetch_discounts(
     lang: str = "english",
     page_size: int = 100,
     max_pages: int = 40,
-    sleep: float = 0.4,
+    sleep: float = 0.8,
     progress=None,
 ) -> list[dict]:
     """Return all currently-discounted games, sorted by discount desc.
@@ -287,10 +287,20 @@ def fetch_discounts(
             "cc": cc,
             "l": lang,
         }
-        text = _http_get(SEARCH_URL, params)
+        try:
+            text = _http_get(SEARCH_URL, params)
+        except SteamBlockedError:
+            # Rate-limited/blocked mid-crawl: keep whatever we already collected
+            # rather than throwing it all away. Only propagate if page 1 failed
+            # and we have nothing to show.
+            if games:
+                break
+            raise
         try:
             payload = json.loads(text)
         except json.JSONDecodeError as exc:
+            if games:
+                break
             raise SteamBlockedError(
                 "Steam search returned non-JSON (likely a block/redirect page)."
             ) from exc

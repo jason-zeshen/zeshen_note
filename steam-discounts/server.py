@@ -141,9 +141,13 @@ class Handler(BaseHTTPRequestHandler):
         try:
             games = get_discounts(cc, refresh=refresh)
         except steam.SteamBlockedError as exc:
+            # Print the real reason to the console so it's visible next to the
+            # "502" access-log line (e.g. the underlying "Steam returned HTTP 429").
+            print(f"  ↳ cc={cc}: {exc}", file=sys.stderr)
             self._send_json({"error": "blocked", "message": str(exc)}, status=502)
             return
         except Exception as exc:  # noqa: BLE001 - surface any fetch failure to UI
+            print(f"  ↳ cc={cc}: fetch failed: {exc!r}", file=sys.stderr)
             self._send_json({"error": "fetch_failed", "message": str(exc)}, status=502)
             return
 
