@@ -65,36 +65,58 @@ _SSL_CTX = _ssl_context()
 # ---------------------------------------------------------------------------
 # HTTP
 # ---------------------------------------------------------------------------
-def _http_get(url: str, params: dict | None = None, timeout: int = 25) -> str:
+# HTTP codes worth retrying: 429 = rate-limited, 5xx = transient server hiccup.
+_RETRY_STATUS = {429, 500, 502, 503, 504}
+
+
+def _http_get(url: str, params: dict | None = None, timeout: int = 25,
+              retries: int = 4) -> str:
     if params:
         url = f"{url}?{urllib.parse.urlencode(params)}"
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    try:
-        with urllib.request.urlopen(req, timeout=timeout, context=_SSL_CTX) as resp:
-            raw = resp.read()
-    except urllib.error.HTTPError as exc:
-        raise SteamBlockedError(
-            f"Steam returned HTTP {exc.code}. It may be rate-limiting or "
-            f"blocking this request. Try again shortly."
-        ) from exc
-    except ssl.SSLError as exc:
-        raise SteamBlockedError(
-            "TLS verification to Steam failed — likely a TLS-intercepting proxy "
-            "(e.g. Zscaler). Point STEAM_CA_BUNDLE at your corporate CA bundle "
-            f"(detail: {exc})."
-        ) from exc
-    except urllib.error.URLError as exc:
-        reason = getattr(exc, "reason", exc)
-        if isinstance(reason, ssl.SSLError) or "CERTIFICATE_VERIFY_FAILED" in str(reason):
+    attempt = 0
+    while True:
+        try:
+            with urllib.request.urlopen(req, timeout=timeout, context=_SSL_CTX) as resp:
+                raw = resp.read()
+            break
+        except urllib.error.HTTPError as exc:
+            # Steam throttles bursts with 429. Back off and retry instead of
+            # failing outright; honor Retry-After if present.
+            if exc.code in _RETRY_STATUS and attempt < retries:
+                retry_after = exc.headers.get("Retry-After") if exc.headers else None
+                try:
+                    wait = float(retry_after) if retry_after else 0.0
+                except (TypeError, ValueError):
+                    wait = 0.0
+                wait = max(wait, 2.0 ** attempt)  # 1, 2, 4, 8 seconds
+                time.sleep(wait)
+                attempt += 1
+                continue
+            hint = (" (rate-limited — you're fetching too fast; wait a bit and "
+                    "avoid repeated Refresh)") if exc.code == 429 else ""
+            raise SteamBlockedError(
+                f"Steam returned HTTP {exc.code}. It may be rate-limiting or "
+                f"blocking this request. Try again shortly.{hint}"
+            ) from exc
+        except ssl.SSLError as exc:
             raise SteamBlockedError(
                 "TLS verification to Steam failed — likely a TLS-intercepting proxy "
-                "(e.g. Zscaler). Set STEAM_CA_BUNDLE to your corporate CA bundle, "
-                "or run on an unrestricted network."
+                "(e.g. Zscaler). Point STEAM_CA_BUNDLE at your corporate CA bundle "
+                f"(detail: {exc})."
             ) from exc
-        raise SteamBlockedError(
-            f"Could not reach Steam ({reason}). Check your network/proxy, or "
-            f"whether Steam is blocked here."
-        ) from exc
+        except urllib.error.URLError as exc:
+            reason = getattr(exc, "reason", exc)
+            if isinstance(reason, ssl.SSLError) or "CERTIFICATE_VERIFY_FAILED" in str(reason):
+                raise SteamBlockedError(
+                    "TLS verification to Steam failed — likely a TLS-intercepting proxy "
+                    "(e.g. Zscaler). Set STEAM_CA_BUNDLE to your corporate CA bundle, "
+                    "or run on an unrestricted network."
+                ) from exc
+            raise SteamBlockedError(
+                f"Could not reach Steam ({reason}). Check your network/proxy, or "
+                f"whether Steam is blocked here."
+            ) from exc
 
     text = raw.decode("utf-8", errors="replace")
     # Corporate proxies (e.g. Zscaler) may return a 200 page that isn't Steam.

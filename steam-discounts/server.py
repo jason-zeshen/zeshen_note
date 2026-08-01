@@ -77,6 +77,16 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):  # quieter logging
         print(f"[{self.log_date_time_string()}] {fmt % args}")
 
+    def handle_one_request(self):
+        # The browser dropping the connection (navigating away, hammering
+        # Refresh) surfaces as ConnectionAborted/Reset/BrokenPipe while we're
+        # writing the response. That's expected and harmless — swallow it
+        # instead of dumping a scary traceback to the console.
+        try:
+            super().handle_one_request()
+        except (ConnectionAbortedError, ConnectionResetError, BrokenPipeError):
+            self.close_connection = True
+
     def _send_json(self, obj, status=200):
         body = json.dumps(obj, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
