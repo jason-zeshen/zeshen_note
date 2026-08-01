@@ -66,7 +66,19 @@ def get_discounts(cc: str, refresh: bool = False) -> list[dict]:
         hit = _cache.get(cc)
         if hit and not refresh and time.time() - hit[0] < CACHE_TTL:
             return hit[1]
-        games = steam.fetch_discounts(cc=cc)
+        # The paginated search crawl (dozens of fast requests) is exactly what
+        # Steam rate-limits — a normal browser only hits one page, so the crawl
+        # gets 502'd while browsing works fine. If it fails or comes back empty,
+        # fall back to the single-request 'featured specials' endpoint, which
+        # behaves like one browser hit and usually gets through the throttle.
+        try:
+            games = steam.fetch_discounts(cc=cc)
+        except steam.SteamBlockedError:
+            games = []
+        if not games:
+            print(f"  ↳ cc={cc}: search crawl empty/blocked, trying featured "
+                  f"specials (single request)…", file=sys.stderr)
+            games = steam.fetch_featured(cc=cc)  # may raise; surfaced as 502
         _cache[cc] = (time.time(), games)
         return games
 
