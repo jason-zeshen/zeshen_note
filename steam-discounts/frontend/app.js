@@ -55,6 +55,20 @@ function render() {
 
   if (!items.length) {
     els.grid.innerHTML = "";
+    // Distinguish "Steam returned nothing for this region" from "your filters
+    // hid everything", so an empty region isn't mistaken for a broken app.
+    if (allItems.length === 0) {
+      els.status.className = "status";
+      els.status.innerHTML =
+        `Steam returned <b>0</b> discounts for <b>${escapeHtml(els.cc.value.toUpperCase())}</b>. ` +
+        `If other regions do show games, this is almost always Steam <b>rate-limiting</b> a ` +
+        `fresh region fetch — wait ~30s, then hit <b>↻ Refresh</b>. ` +
+        `(A region genuinely may also have no active specials.)`;
+    } else {
+      els.status.className = "status";
+      els.status.textContent =
+        `0 of ${allItems.length} games match your filters (region ${els.cc.value.toUpperCase()}).`;
+    }
     return;
   }
 
